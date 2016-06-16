@@ -21,19 +21,19 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		ByteBuf in = (ByteBuf) msg;
-		logger.info("서버가 받음. 메시지 :{}",in.toString(CharsetUtil.UTF_8));
+		logger.info("channelRead 메시지 :{}",in.toString(CharsetUtil.UTF_8));
 		ctx.write(in);
 	}
 
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-		logger.info("인바운드 완료");
+		ctx.flush();
+		logger.info("channelReadComplete");
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		logger.error("인바운드 오류",cause);
+		logger.error("exceptionCaught ",cause);
 		ctx.close();
 	}
 	
